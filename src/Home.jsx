@@ -4,10 +4,12 @@ import { push } from 'connected-react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-const Home = ({ title, changePage }) => (
+import { getSampleTitle, getVisibleTodos } from './selectors';
+
+const Home = ({ title, changePage, todos }) => (
   <div>
     <h1>{title}</h1>
-    <p>Welcome home!</p>
+    <code>{JSON.stringify(todos)}</code>
     <button type="button" onClick={() => changePage()}>
       Go to about page via redux
     </button>
@@ -17,6 +19,7 @@ const Home = ({ title, changePage }) => (
 Home.propTypes = {
   changePage: PropTypes.func.isRequired,
   title: PropTypes.string,
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 Home.defaultProps = {
@@ -24,7 +27,8 @@ Home.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  title: state.sample.title,
+  title: getSampleTitle(state),
+  todos: getVisibleTodos(state),
 });
 
 const mapDispatchToProps = dispatch =>
