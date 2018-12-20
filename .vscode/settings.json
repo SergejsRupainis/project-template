@@ -1,0 +1,7 @@
+{
+  "javascript.validate.enable": false,
+  "prettier.eslintIntegration": true,
+  "files.eol": "\n",
+  "eslint.autoFixOnSave": true,
+  "editor.formatOnSave": true
+}
