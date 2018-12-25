@@ -15,7 +15,7 @@ import {
   fetchTodosIfNeeded as fetchTodosIfNeededAction,
 } from './reducers/todos';
 
-const selectedListId = 0;
+const selectedListId = 2;
 
 class Home extends Component {
   constructor(props) {

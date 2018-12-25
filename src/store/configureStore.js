@@ -33,7 +33,7 @@ export const configureStore = preloadedState => {
     composedEnhancers
   );
 
-  if (module.hot) {
+  if (process.env.NODE_ENV === 'development' && module.hot) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('../reducers', () => {
       store.replaceReducer(createRootReducer(history));
