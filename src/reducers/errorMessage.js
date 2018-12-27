@@ -1,15 +1,23 @@
-// Updates error message to notify about the failed fetches.
-const errorMessage = (state = null, action) => {
-  const { type, error } = action;
+import { createAction } from 'redux-actions';
 
-  if (type === 'RESET_ERROR_MESSAGE') {
+const ACTION_PREPEND = 'error';
+
+export const resetErrorMessage = createAction(
+  `${ACTION_PREPEND}/reset-error-message`
+);
+
+console.log(resetErrorMessage);
+
+// Updates error message to notify about the failed fetches.
+export default function reducer(state = null, action) {
+  const { type, error, payload } = action;
+
+  if (type === resetErrorMessage) {
     return null;
   }
   if (error) {
-    return error;
+    return payload.message;
   }
 
   return state;
-};
-
-export default errorMessage;
+}

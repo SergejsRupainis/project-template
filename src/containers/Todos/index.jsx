@@ -9,11 +9,12 @@ import injectReducer from '../../utils/injectReducer';
 import reducer, {
   makeSelectItems,
   makeSelectIsFetching,
+  makeSelectError,
   fetchTodosIfNeeded,
   fetchInvalidate,
 } from './todos';
 
-const selectedListId = 1;
+const selectedListId = 0;
 
 class Todos extends Component {
   constructor(props) {
@@ -42,7 +43,14 @@ class Todos extends Component {
   }
 
   render() {
-    const { title, changePage, todos, lastUpdated, isFetching } = this.props;
+    const {
+      title,
+      changePage,
+      todos,
+      lastUpdated,
+      isFetching,
+      error,
+    } = this.props;
 
     return (
       <div>
@@ -51,10 +59,11 @@ class Todos extends Component {
         {!isFetching && todos.length === 0 && <h2>Empty.</h2>}
         {todos.length > 0 && <code>{JSON.stringify(todos)}</code>}
         {lastUpdated && (
-          <span>
+          <div>
             Last updated at {new Date(lastUpdated).toLocaleTimeString()}.{' '}
-          </span>
+          </div>
         )}
+        {error && <div>{`Error message: ${error}`}</div>}
         {!isFetching && (
           <button type="button" onClick={this.handleRefreshClick}>
             Refresh
@@ -76,16 +85,19 @@ Todos.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   title: PropTypes.string,
   lastUpdated: PropTypes.number,
+  error: PropTypes.string,
 };
 
 Todos.defaultProps = {
   title: 'Dummy title',
   lastUpdated: Date.now(),
+  error: '',
 };
 
 const mapStateToProps = createStructuredSelector({
   todos: makeSelectItems(),
   isFetching: makeSelectIsFetching(),
+  error: makeSelectError(),
 });
 
 const mapDispatchToProps = dispatch => ({

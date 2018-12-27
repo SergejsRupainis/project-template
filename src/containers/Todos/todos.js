@@ -7,13 +7,14 @@ import { combineReducers } from 'redux';
 import { createSelector } from 'reselect';
 import { createAction, handleActions } from 'redux-actions';
 
-import todosAgent from './agent';
+import agent from './agent';
 
 // #region INITIAL STATE
 export const initialState = {
   isFetching: false,
   items: null,
   didInvalidate: false,
+  error: null,
 };
 // #endregion
 
@@ -30,6 +31,12 @@ export const makeSelectIsFetching = () =>
   createSelector(
     getTodos,
     todosState => todosState.isFetching
+  );
+
+export const makeSelectError = () =>
+  createSelector(
+    getTodos,
+    todosState => todosState.error
   );
 // #endregion
 
@@ -50,33 +57,31 @@ export function fetchTodos(listId) {
     dispatch(fetchRequested({ listId }));
 
     try {
-      const todosList = await todosAgent.getList(listId);
-      dispatch(fetchResponse({ listId, items: todosList }));
+      const items = await agent.getList(listId);
+      dispatch(fetchResponse({ listId, items }));
     } catch (error) {
-      dispatch(fetchResponse({ listId, error }));
+      dispatch(fetchResponse(error));
     }
   };
 }
 
-function shouldFetchTodos(state) {
-  const todosState = getTodos(state);
-  if (!todosState) {
+function shouldFetch(globalState) {
+  const state = getTodos(globalState);
+  if (!state) {
     return false;
   }
-  if (!todosState.items) {
+  if (!state.items) {
     return true;
   }
-  if (todosState.isFetching) {
+  if (state.isFetching) {
     return false;
   }
-  return todosState.didInvalidate;
+  return state.didInvalidate;
 }
 
 export function fetchTodosIfNeeded(listId) {
   return (dispatch, getState) =>
-    shouldFetchTodos(getState())
-      ? dispatch(fetchTodos(listId))
-      : Promise.resolve();
+    shouldFetch(getState()) ? dispatch(fetchTodos(listId)) : Promise.resolve();
 }
 // #endregion
 
@@ -99,7 +104,7 @@ const items = handleActions(
       return state;
     },
     [fetchResponse](state, { payload }) {
-      return payload.items;
+      return payload.items ? payload.items : state;
     },
   },
   initialState.items
@@ -120,10 +125,30 @@ const didInvalidate = handleActions(
   initialState.didInvalidate
 );
 
+const error = handleActions(
+  {
+    [fetchResponse]: {
+      next() {
+        return null;
+      },
+      throw(
+        state,
+        {
+          payload: { message },
+        }
+      ) {
+        return message;
+      },
+    },
+  },
+  initialState.error
+);
+
 export default combineReducers({
   isFetching,
   items,
   didInvalidate,
+  error,
 });
 
 // #endregion
