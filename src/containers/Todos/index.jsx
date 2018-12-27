@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { push } from 'connected-react-router';
-import { bindActionCreators, compose } from 'redux';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import injectReducer from '../../utils/injectReducer';
-import {
-  getTodosTitle,
-  getVisibleTodos,
-  getTodosIsFetching,
-  getTodosLastUpdatedDate,
-} from '../../selectors';
-import {
-  invalidateList as invalidateListAction,
-  fetchTodosIfNeeded as fetchTodosIfNeededAction,
-  todos as todosCleanReducer,
-} from '../../reducers/todos';
+import reducer, {
+  makeSelectItems,
+  makeSelectIsFetching,
+  fetchTodosIfNeeded,
+  fetchInvalidate,
+} from './todos';
 
 const selectedListId = 1;
 
@@ -26,8 +22,8 @@ class Todos extends Component {
   }
 
   componentDidMount() {
-    const { fetchTodosIfNeeded } = this.props;
-    fetchTodosIfNeeded(selectedListId);
+    const { fetchTodos } = this.props;
+    fetchTodos(selectedListId);
   }
 
   componentDidUpdate() {
@@ -41,9 +37,8 @@ class Todos extends Component {
   handleRefreshClick(e) {
     e.preventDefault();
 
-    const { fetchTodosIfNeeded, invalidateList } = this.props;
-    invalidateList(selectedListId);
-    fetchTodosIfNeeded(selectedListId);
+    const { refresh } = this.props;
+    refresh(selectedListId);
   }
 
   render() {
@@ -75,35 +70,32 @@ class Todos extends Component {
 
 Todos.propTypes = {
   changePage: PropTypes.func.isRequired,
-  title: PropTypes.string,
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
-  fetchTodosIfNeeded: PropTypes.func.isRequired,
-  invalidateList: PropTypes.func.isRequired,
-  lastUpdated: PropTypes.number,
+  fetchTodos: PropTypes.func.isRequired,
+  refresh: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
+  title: PropTypes.string,
+  lastUpdated: PropTypes.number,
 };
 
 Todos.defaultProps = {
-  title: '',
-  lastUpdated: 0,
+  title: 'Dummy title',
+  lastUpdated: Date.now(),
 };
 
-const mapStateToProps = state => ({
-  title: getTodosTitle(state),
-  todos: getVisibleTodos(state),
-  lastUpdated: getTodosLastUpdatedDate(state),
-  isFetching: getTodosIsFetching(state),
+const mapStateToProps = createStructuredSelector({
+  todos: makeSelectItems(),
+  isFetching: makeSelectIsFetching(),
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      changePage: () => push('/about-us'),
-      fetchTodosIfNeeded: fetchTodosIfNeededAction,
-      invalidateList: invalidateListAction,
-    },
-    dispatch
-  );
+const mapDispatchToProps = dispatch => ({
+  fetchTodos: listId => dispatch(fetchTodosIfNeeded(listId)),
+  refresh: listId => {
+    dispatch(fetchInvalidate(listId));
+    dispatch(fetchTodosIfNeeded(listId));
+  },
+  changePage: () => dispatch(push('/about-us')),
+});
 
 const withConnect = connect(
   mapStateToProps,
@@ -113,7 +105,7 @@ const withConnect = connect(
 // You can add multiple reducers if you want - https://stackoverflow.com/questions/49988229/dynamically-load-redux-reducers-with-react-router-4
 const todosReducer = injectReducer({
   key: 'todos',
-  reducer: todosCleanReducer,
+  reducer,
 });
 
 export default compose(

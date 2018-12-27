@@ -13,28 +13,20 @@ export default ({ key, reducer }) => WrappedComponent => {
       WrappedComponent.name ||
       'Component'})`;
 
-    // injectors = getInjectors(this.context.store); // eslint-disable-line react/destructuring-assignment
-
-    // componentWillMount() {
-    //   const { injectReducer } = this.injectors;
-    //   injectReducer(key, reducer);
-    // }
-
     prepareInjector(store) {
-      if (store !== this.store) {
-        this.store = store;
+      this.injectors = getInjectors(store);
 
-        this.injectors = getInjectors(store);
-
-        const { injectReducer } = this.injectors;
-        injectReducer(key, reducer);
-      }
+      const { injectReducer } = this.injectors;
+      injectReducer(key, reducer);
     }
 
     renderWrappedComponent = value => {
       const { store } = value;
-      this.prepareInjector(store);
 
+      if (store !== this.store) {
+        this.store = store;
+        this.prepareInjector(store);
+      }
       return <WrappedComponent {...this.props} />;
     };
 

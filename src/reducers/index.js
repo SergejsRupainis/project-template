@@ -1,14 +1,16 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 
-// import todos from './todos';
-import errorMessage from './errorMessage';
+import history from '../utils/history';
+import errorMessageReducer from './errorMessage';
 
-export default function createRootReducer(history, asyncReducers) {
+/**
+ * Merges the main reducer with the router state and dynamically injected reducers
+ */
+export default function createReducer(injectedReducers = {}) {
   return combineReducers({
     router: connectRouter(history),
-    //    todos,
-    errorMessage,
-    ...asyncReducers,
+    errorMessage: errorMessageReducer,
+    ...injectedReducers,
   });
 }

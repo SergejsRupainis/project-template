@@ -12,6 +12,6 @@ export default {
             { name: 'sdfs', completed: false },
           ]);
         }
-      }, 3000);
+      }, 1000);
     }),
 };
