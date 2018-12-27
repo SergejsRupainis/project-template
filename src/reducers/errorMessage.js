@@ -6,8 +6,6 @@ export const resetErrorMessage = createAction(
   `${ACTION_PREPEND}/reset-error-message`
 );
 
-console.log(resetErrorMessage);
-
 // Updates error message to notify about the failed fetches.
 export default function reducer(state = null, action) {
   const { type, error, payload } = action;
