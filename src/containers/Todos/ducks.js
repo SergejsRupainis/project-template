@@ -7,7 +7,25 @@ import { combineReducers } from 'redux';
 import { createSelector } from 'reselect';
 import { createAction, handleActions } from 'redux-actions';
 
-import agent from './agent';
+// #region AGENT
+export const agent = {
+  getList: listId =>
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (listId === 0) {
+          reject(new Error('Sample error'));
+        } else {
+          resolve([
+            { name: '54tr', completed: false },
+            { name: 'dfgsdfs', completed: true },
+            { name: 'sdfsdf', completed: true },
+            { name: 'sdfs', completed: false },
+          ]);
+        }
+      }, 1000);
+    }),
+};
+// #endregion
 
 // #region INITIAL STATE
 export const initialState = {

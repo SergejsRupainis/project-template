@@ -12,9 +12,9 @@ import reducer, {
   makeSelectError,
   fetchTodosIfNeeded,
   fetchInvalidate,
-} from './todos';
+} from './ducks';
 
-const selectedListId = 0;
+const selectedListId = 1;
 
 class Todos extends Component {
   constructor(props) {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 // import Home from './Home';
-import Todos from './containers/Todos';
+import Todos from './containers/Todos/Todos';
 import logo from './logo.svg';
 import './App.css';
 
