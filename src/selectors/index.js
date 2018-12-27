@@ -1,11 +1,17 @@
 import { createSelector } from 'reselect';
 
-export const getTodosTitle = state => state.todos.title;
+export const getTodosTitle = state => (state.todos ? state.todos.title : '');
 
-const getVisibilityFilter = state => state.todos.visibilityFilter;
-const getTodos = state => state.todos.items || [];
-export const getTodosIsFetching = state => state.todos.isFetching;
-export const getTodosLastUpdatedDate = state => state.todos.lastUpdated;
+const getVisibilityFilter = state =>
+  state.todos ? state.todos.visibilityFilter : 'SHOW_ALL';
+
+const getTodos = state => (state.todos ? state.todos.items || [] : []);
+
+export const getTodosIsFetching = state =>
+  state.todos ? state.todos.isFetching : false;
+
+export const getTodosLastUpdatedDate = state =>
+  state.todos ? state.todos.lastUpdated : 0;
 
 export const getVisibleTodos = createSelector(
   [getVisibilityFilter, getTodos],

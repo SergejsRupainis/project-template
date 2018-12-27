@@ -26,19 +26,28 @@ const composedEnhancers = compose(
   ...enhancers
 );
 
-export const configureStore = preloadedState => {
+export function configureStore(preloadedState) {
   const store = createStore(
     createRootReducer(history),
     preloadedState,
     composedEnhancers
   );
+  store.injectedReducers = {};
 
   if (process.env.NODE_ENV === 'development' && module.hot) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('../reducers', () => {
-      store.replaceReducer(createRootReducer(history));
+      store.replaceReducer(createRootReducer(store.injectedReducers));
     });
   }
 
   return store;
-};
+}
+
+export function injectAsyncReducer(store, name, asyncReducer) {
+  /* eslint-disable no-param-reassign */
+  store.injectedReducers[name] = asyncReducer;
+  /* eslint-enable no-param-reassign */
+
+  store.replaceReducer(createRootReducer(history, store.injectedReducers));
+}

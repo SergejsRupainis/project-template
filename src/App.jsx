@@ -1,7 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Home from './Home';
+// import Home from './Home';
+import Todos from './containers/Todos';
 import logo from './logo.svg';
 import './App.css';
 
@@ -22,7 +23,7 @@ const App = () => (
       </a>
     </header>
     <Switch>
-      <Route exact path="/" component={Home} />
+      <Route exact path="/" component={Todos} />
     </Switch>
   </div>
 );

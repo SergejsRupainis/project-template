@@ -9,7 +9,7 @@ const initialState = {
   items: null,
 };
 
-export default function todos(state = initialState, action) {
+export const todos = function todos(state = initialState, action) {
   switch (action.type) {
     case 'INVALIDATE_TODOS_LIST':
       return {
@@ -39,7 +39,7 @@ export default function todos(state = initialState, action) {
     default:
       return state;
   }
-}
+};
 
 // actions
 // example of async actions: https://redux.js.org/advanced/async-actions
@@ -82,6 +82,9 @@ export function fetchTodos(listId) {
 
 function shouldFetchTodos(state) {
   const todosState = state.todos;
+  if (!todosState) {
+    return false;
+  }
   if (!todosState.items) {
     return true;
   }
