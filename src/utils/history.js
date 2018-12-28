@@ -1,7 +1,13 @@
-import createHistory from 'history/createBrowserHistory';
+import createBrowserHistory from 'history/createBrowserHistory';
+import createMemoryHistory from 'history/createMemoryHistory';
 
+import isServer from './isServer';
 import packageJson from '../../package.json';
 
-const history = createHistory({ basename: packageJson.homepage });
+const history = isServer()
+  ? createMemoryHistory({
+      initialEntries: [packageJson.homepage],
+    })
+  : createBrowserHistory({ basename: packageJson.homepage });
 
 export default history;
