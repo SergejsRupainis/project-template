@@ -24,7 +24,6 @@ class Todos extends Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount');
     const { fetchTodos } = this.props;
     fetchTodos(selectedListId);
   }
