@@ -25,9 +25,9 @@ import {
 const selectedListId = 1;
 
 /**
- * Root container for todos list
+ * Root container for todos list. Export clear component for testing purposes
  */
-class Todos extends Component {
+export class Todos extends Component {
   static propTypes = {
     changePage: PropTypes.func.isRequired,
     /** List of todos */
