@@ -1,3 +1,10 @@
+/*
+ * Todos page
+ *
+ * This is the first thing users see of our App, at the '/' route
+ * Writing documentation for React components: https://react-styleguidist.js.org/docs/documenting.html
+ */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { push } from 'connected-react-router';
@@ -17,7 +24,28 @@ import {
 
 const selectedListId = 1;
 
+/**
+ * Root container for todos list
+ */
 class Todos extends Component {
+  static propTypes = {
+    changePage: PropTypes.func.isRequired,
+    /** List of todos */
+    todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+    fetchTodos: PropTypes.func.isRequired,
+    refresh: PropTypes.func.isRequired,
+    isFetching: PropTypes.bool.isRequired,
+    title: PropTypes.string,
+    lastUpdated: PropTypes.number,
+    error: PropTypes.string,
+  };
+
+  static defaultProps = {
+    title: 'Dummy title',
+    lastUpdated: Date.now(),
+    error: '',
+  };
+
   constructor(props) {
     super(props);
     this.handleRefreshClick = this.handleRefreshClick.bind(this);
@@ -78,23 +106,6 @@ class Todos extends Component {
     );
   }
 }
-
-Todos.propTypes = {
-  changePage: PropTypes.func.isRequired,
-  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
-  fetchTodos: PropTypes.func.isRequired,
-  refresh: PropTypes.func.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  title: PropTypes.string,
-  lastUpdated: PropTypes.number,
-  error: PropTypes.string,
-};
-
-Todos.defaultProps = {
-  title: 'Dummy title',
-  lastUpdated: Date.now(),
-  error: '',
-};
 
 const mapStateToProps = createStructuredSelector({
   todos: makeSelectItems(),

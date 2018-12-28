@@ -1,3 +1,18 @@
+/*
+ * Todos Actions
+ *
+ * Actions change things in your application
+ * Since this boilerplate uses a uni-directional data flow, specifically redux,
+ * we have these actions which are the only way your application interacts with
+ * your application state. This guarantees that your state is up to date and nobody
+ * messes it up weirdly somewhere.
+ *
+ * To add a new Action:
+ * 1) Import your constant
+ * 2) Add a function like this:
+ *    export const yourAction = createAction(YOUR_ACTION_CONSTANT);
+ */
+
 import { createAction } from 'redux-actions';
 
 import agent from './agent';
@@ -11,6 +26,12 @@ export const fetchResponse = createAction(FETCH_RESPONSE, payload => ({
   receivedAt: Date.now(),
 }));
 
+/**
+ * Fetches todos from the external resource
+ *
+ * @param  {number} listId Identificator of todos list
+ * @return {Promise} Promise
+ */
 export function fetchTodos(listId) {
   return async dispatch => {
     dispatch(fetchRequested({ listId }));
