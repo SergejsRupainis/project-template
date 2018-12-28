@@ -1,6 +1,8 @@
 import todosReducer, { initialState } from '../reducer';
 import { fetchInvalidate, fetchRequested, fetchResponse } from '../actions';
 
+// to check code coverage run `npm test -- --coverage`
+
 describe('todosReducer', () => {
   let state;
   beforeEach(() => {
