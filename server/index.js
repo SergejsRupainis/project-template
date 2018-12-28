@@ -30,7 +30,19 @@ require('@babel/register')({
   babelrc: false,
   ignore: [/node_modules/, /build/],
   presets: ['@babel/preset-env', '@babel/preset-react'],
-  plugins: ['@loadable/babel-plugin'],
+  plugins: [
+    '@babel/plugin-proposal-class-properties',
+    '@loadable/babel-plugin',
+    [
+      'module-resolver',
+      {
+        root: ['./src'],
+        alias: {
+          utils: './src/utils',
+        },
+      },
+    ],
+  ],
 });
 
 // Now that the nonsense is over... load up the server entry point

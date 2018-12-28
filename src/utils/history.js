@@ -5,9 +5,7 @@ import isServer from './isServer';
 import packageJson from '../../package.json';
 
 const history = isServer()
-  ? createMemoryHistory({
-      initialEntries: [packageJson.homepage],
-    })
+  ? createMemoryHistory()
   : createBrowserHistory({ basename: packageJson.homepage });
 
 export default history;

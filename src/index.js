@@ -1,23 +1,40 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render, hydrate } from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
+import { loadableReady } from '@loadable/component';
 
 import './index.css';
 import App from './App';
 import history from './utils/history';
 import configureStore from './store/configureStore';
 
-const initialState = {};
+/* eslint-disable no-underscore-dangle */
+const initialState = window.__PRELOADED_STATE__ || {};
+delete window.__PRELOADED_STATE__;
+/* eslint-enable no-underscore-dangle */
+
 const store = configureStore(initialState, history);
 
 /* eslint-disable react/jsx-filename-extension */
-ReactDOM.render(
+const Application = (
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <App />
     </ConnectedRouter>
-  </Provider>,
-  document.getElementById('root')
+  </Provider>
 );
 /* eslint-enable react/jsx-filename-extension */
+
+const root = document.getElementById('root');
+
+if (process.env.NODE_ENV === 'production') {
+  // If we're running in production, we use hydrate to get fast page loads by just
+  // attaching event listeners after the initial render
+  loadableReady(() => {
+    hydrate(Application, root);
+  });
+} else {
+  // If we're not running on the server, just render like normal
+  render(Application, root);
+}
