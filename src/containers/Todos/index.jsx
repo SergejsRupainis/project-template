@@ -6,13 +6,14 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import injectReducer from 'utils/injectReducer';
-import reducer, {
+
+import reducer from './reducer';
+import { fetchTodosIfNeeded, fetchInvalidate } from './actions';
+import {
   makeSelectItems,
   makeSelectIsFetching,
   makeSelectError,
-  fetchTodosIfNeeded,
-  fetchInvalidate,
-} from './ducks';
+} from './selectors';
 
 const selectedListId = 1;
 
@@ -23,6 +24,7 @@ class Todos extends Component {
   }
 
   componentDidMount() {
+    console.log('componentDidMount');
     const { fetchTodos } = this.props;
     fetchTodos(selectedListId);
   }
@@ -56,6 +58,7 @@ class Todos extends Component {
       <div>
         <h1>{title}</h1>
         {isFetching && todos.length === 0 && <h2>Loading...</h2>}
+        {isFetching && <h2>Still loading...</h2>}
         {!isFetching && todos.length === 0 && <h2>Empty.</h2>}
         {todos.length > 0 && <code>{JSON.stringify(todos)}</code>}
         {lastUpdated && (
