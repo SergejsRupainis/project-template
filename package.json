@@ -105,6 +105,7 @@
     ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web",
+      "^utils(.*)$": "<rootDir>/src/utils$1",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
     },
     "moduleFileExtensions": [
