@@ -10,7 +10,7 @@ import fi from 'react-intl/locale-data/fi';
 import 'intl/locale-data/jsonp/en';
 import 'intl/locale-data/jsonp/fi';
 
-import { SUPPORTED_LANGUAGES } from '../config';
+import { SUPPORTED_LANGUAGES } from '../../config';
 
 if (global.Intl) {
   // Determine if the built-in `Intl` has the locale data we need.

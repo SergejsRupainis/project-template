@@ -139,15 +139,6 @@ const FrontloadTodos = frontloadConnect(frontload, {
   onUpdate: false,
 })(Todos);
 
-// const mapDispatchToProps = dispatch => ({
-//   fetchTodos: listId => dispatch(fetchTodosIfNeeded(listId)),
-//   refresh: listId => {
-//     dispatch(fetchInvalidate(listId));
-//     dispatch(fetchTodosIfNeeded(listId));
-//   },
-//   changePage: () => dispatch(push('/about-us')),
-// });
-
 const withConnect = connect(
   mapStateToProps,
   mapDispatchToProps
