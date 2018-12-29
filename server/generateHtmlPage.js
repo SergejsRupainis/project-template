@@ -73,22 +73,34 @@ export default function generateHtmlPage(res, url, htmlData, store) {
       // We need to tell Helmet to compute the right meta tags, title, and such
       const helmet = Helmet.renderStatic();
 
-      const scriptTags = extractor.getScriptTags();
-      const prefetchScriptTags = extractor.getLinkTags();
-      const styleTags = extractor.getStyleTags();
-      const styledStyleTags = sheet.getStyleTags();
-
       // Pass all this nonsense into our HTML formatting function above
       const html = injectHTML(htmlData, {
         html: helmet.htmlAttributes.toString(),
         title: helmet.title.toString(),
         meta: helmet.meta.toString(),
         body: routeMarkup,
-        styleTags: `${styleTags}${styledStyleTags}`,
-        prefetchScriptTags,
-        scriptTags,
+        styleTags: ``,
+        prefetchScriptTags: '',
+        scriptTags: '',
         state: JSON.stringify(store.getState()).replace(/</g, '\\u003c'),
       });
+
+      /* old version - not sure, need to try preloading and check how it would work */
+      // const scriptTags = extractor.getScriptTags();
+      // const prefetchScriptTags = extractor.getLinkTags();
+      // const styleTags = extractor.getStyleTags();
+      // const styledStyleTags = sheet.getStyleTags();
+
+      // const html = injectHTML(htmlData, {
+      //   html: helmet.htmlAttributes.toString(),
+      //   title: helmet.title.toString(),
+      //   meta: helmet.meta.toString(),
+      //   body: routeMarkup,
+      //   styleTags: `${styleTags}${styledStyleTags}`,
+      //   prefetchScriptTags,
+      //   scriptTags,
+      //   state: JSON.stringify(store.getState()).replace(/</g, '\\u003c'),
+      // });
 
       // We have all the final HTML, let's send it to the user already!
       res.send(html);

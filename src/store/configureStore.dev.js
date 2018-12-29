@@ -22,7 +22,11 @@ export default function configureStore(initialState = {}, history) {
     ...enhancers
   );
 
-  const store = createStore(createReducer(), initialState, composedEnhancers);
+  const store = createStore(
+    createReducer({}, initialState),
+    initialState,
+    composedEnhancers
+  );
 
   store.injectedReducers = {};
 
@@ -30,7 +34,9 @@ export default function configureStore(initialState = {}, history) {
   /* istanbul ignore next */
   if (module.hot) {
     module.hot.accept('../reducers', () => {
-      store.replaceReducer(createReducer(store.injectedReducers));
+      store.replaceReducer(
+        createReducer(store.injectedReducers, store.getState())
+      );
     });
   }
 

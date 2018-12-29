@@ -13,7 +13,11 @@ export default function configureStore(initialState = {}, history) {
     ...enhancers
   );
 
-  const store = createStore(createReducer(), initialState, composedEnhancers);
+  const store = createStore(
+    createReducer({}, initialState),
+    initialState,
+    composedEnhancers
+  );
 
   store.injectedReducers = {};
 

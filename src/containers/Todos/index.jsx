@@ -8,14 +8,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { push } from 'connected-react-router';
-import { compose } from 'redux';
+import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { frontloadConnect } from 'react-frontload';
 
 import injectReducer from 'utils/injectReducer';
 
 import reducer from './reducer';
-import { fetchTodosIfNeeded, fetchInvalidate } from './actions';
+import {
+  fetchTodosIfNeeded,
+  fetchInvalidate as fetchInvalidateAction,
+} from './actions';
 import {
   makeSelectItems,
   makeSelectIsFetching,
@@ -33,7 +37,7 @@ export class Todos extends Component {
     /** List of todos */
     todos: PropTypes.arrayOf(PropTypes.object).isRequired,
     fetchTodos: PropTypes.func.isRequired,
-    refresh: PropTypes.func.isRequired,
+    fetchInvalidate: PropTypes.func.isRequired,
     isFetching: PropTypes.bool.isRequired,
     title: PropTypes.string,
     lastUpdated: PropTypes.number,
@@ -51,10 +55,10 @@ export class Todos extends Component {
     this.handleRefreshClick = this.handleRefreshClick.bind(this);
   }
 
-  componentDidMount() {
-    const { fetchTodos } = this.props;
-    fetchTodos(selectedListId);
-  }
+  // componentDidMount() {
+  //   const { fetchTodos } = this.props;
+  //   fetchTodos(selectedListId);
+  // }
 
   componentDidUpdate() {
     // https://redux.js.org/advanced/example-reddit-api
@@ -67,8 +71,9 @@ export class Todos extends Component {
   handleRefreshClick(e) {
     e.preventDefault();
 
-    const { refresh } = this.props;
-    refresh(selectedListId);
+    const { fetchTodos, fetchInvalidate } = this.props;
+    fetchInvalidate(selectedListId);
+    fetchTodos(selectedListId);
   }
 
   render() {
@@ -113,14 +118,31 @@ const mapStateToProps = createStructuredSelector({
   error: makeSelectError(),
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchTodos: listId => dispatch(fetchTodosIfNeeded(listId)),
-  refresh: listId => {
-    dispatch(fetchInvalidate(listId));
-    dispatch(fetchTodosIfNeeded(listId));
-  },
-  changePage: () => dispatch(push('/about-us')),
-});
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      changePage: () => push('/about-us'),
+      fetchTodos: fetchTodosIfNeeded,
+      fetchInvalidate: fetchInvalidateAction,
+    },
+    dispatch
+  );
+
+const frontload = async props => props.fetchTodos(selectedListId);
+
+const FrontloadTodos = frontloadConnect(frontload, {
+  onMount: true,
+  onUpdate: false,
+})(Todos);
+
+// const mapDispatchToProps = dispatch => ({
+//   fetchTodos: listId => dispatch(fetchTodosIfNeeded(listId)),
+//   refresh: listId => {
+//     dispatch(fetchInvalidate(listId));
+//     dispatch(fetchTodosIfNeeded(listId));
+//   },
+//   changePage: () => dispatch(push('/about-us')),
+// });
 
 const withConnect = connect(
   mapStateToProps,
@@ -136,4 +158,4 @@ const todosReducer = injectReducer({
 export default compose(
   todosReducer,
   withConnect
-)(Todos);
+)(FrontloadTodos);

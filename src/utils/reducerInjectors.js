@@ -14,7 +14,9 @@ export function injectReducerFactory(store) {
     }
 
     store.injectedReducers[key] = reducer; // eslint-disable-line no-param-reassign
-    store.replaceReducer(createReducer(store.injectedReducers));
+    store.replaceReducer(
+      createReducer(store.injectedReducers, store.getState())
+    );
   };
 }
 
