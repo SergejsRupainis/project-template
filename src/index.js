@@ -9,6 +9,7 @@ import './index.css';
 import App from './App';
 import history from './utils/history';
 import configureStore from './store/configureStore';
+import LanguageProvider from './providers/LanguageProvider';
 
 /* eslint-disable no-underscore-dangle */
 const initialState = window.__PRELOADED_STATE__;
@@ -20,11 +21,13 @@ const store = configureStore(initialState, history);
 /* eslint-disable react/jsx-filename-extension */
 const Application = (
   <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <Frontload noServerRender>
-        <App />
-      </Frontload>
-    </ConnectedRouter>
+    <LanguageProvider>
+      <ConnectedRouter history={history}>
+        <Frontload noServerRender>
+          <App />
+        </Frontload>
+      </ConnectedRouter>
+    </LanguageProvider>
   </Provider>
 );
 /* eslint-enable react/jsx-filename-extension */

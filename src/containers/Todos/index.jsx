@@ -12,6 +12,7 @@ import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { frontloadConnect } from 'react-frontload';
+import { FormattedMessage } from 'react-intl';
 
 import injectReducer from 'utils/injectReducer';
 
@@ -89,6 +90,9 @@ export class Todos extends Component {
     return (
       <div>
         <h1>{title}</h1>
+        <h2>
+          <FormattedMessage id="home.hello" />
+        </h2>
         {isFetching && todos.length === 0 && <h2>Loading...</h2>}
         {isFetching && <h2>Still loading...</h2>}
         {!isFetching && todos.length === 0 && <h2>Empty.</h2>}
