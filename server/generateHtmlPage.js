@@ -11,7 +11,7 @@ import { ChunkExtractor } from '@loadable/server';
 import { translationMessages } from 'utils/i18n';
 
 import App from '../src/App.jsx';
-import LanguageProvider from '../src/containers/LanguageProvider';
+import LocaleProvider from '../src/containers/LocaleProvider';
 import { homepage } from '../package.json';
 import injectHTML from './injectHTML';
 
@@ -55,9 +55,9 @@ export default function generateHtmlPage(res, url, htmlData, store) {
           basename={homepage.slice(0, -1)}
         >
           <Frontload isServer>
-            <LanguageProvider messages={translationMessages}>
+            <LocaleProvider messages={translationMessages}>
               <App />
-            </LanguageProvider>
+            </LocaleProvider>
           </Frontload>
         </StaticRouter>
       </Provider>

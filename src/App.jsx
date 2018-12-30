@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 
 // import Home from './Home';
 import Todos from './containers/Todos/Loadable';
-import LocaleResolver from './containers/LanguageProvider/LocaleResolver';
+import LocaleResolver from './containers/LocaleProvider/LocaleResolver';
 import logo from './logo.svg';
 import './App.css';
 

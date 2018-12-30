@@ -10,7 +10,7 @@ import injectReducer from 'utils/injectReducer';
 import reducer from './reducer';
 import { makeSelectLocale } from './selectors';
 
-class LanguageProvider extends React.PureComponent {
+class LocaleProvider extends React.PureComponent {
   static propTypes = {
     locale: PropTypes.string.isRequired,
     messages: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -52,4 +52,4 @@ const localeReducer = injectReducer({
 export default compose(
   localeReducer,
   withConnect
-)(LanguageProvider);
+)(LocaleProvider);

@@ -10,7 +10,7 @@ import history from 'utils/history';
 import './index.css';
 import App from './App';
 import configureStore from './store/configureStore';
-import LanguageProvider from './containers/LanguageProvider';
+import LocaleProvider from './containers/LocaleProvider';
 
 /* eslint-disable no-underscore-dangle */
 const initialState = window.__PRELOADED_STATE__;
@@ -23,13 +23,13 @@ const store = configureStore(initialState, history);
 const renderApplication = messages => {
   const Application = (
     <Provider store={store}>
-      <LanguageProvider messages={messages}>
+      <LocaleProvider messages={messages}>
         <ConnectedRouter history={history}>
           <Frontload noServerRender>
             <App />
           </Frontload>
         </ConnectedRouter>
-      </LanguageProvider>
+      </LocaleProvider>
     </Provider>
   );
   const root = document.getElementById('root');
