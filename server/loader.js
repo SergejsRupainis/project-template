@@ -2,7 +2,6 @@ import path from 'path';
 import fs from 'fs';
 
 import history from '../src/utils/history';
-import extractUrl from './extractUrl';
 import configureStore from '../src/store/configureStore';
 import generateHtmlPage from './generateHtmlPage';
 
@@ -27,10 +26,7 @@ export default (req, res) => {
       history.push(req.url);
       const store = configureStore(initialState, history);
 
-      // Get a url without a basename
-      const url = extractUrl(homepage, req.url);
-
-      generateHtmlPage(res, url, htmlData, store);
+      generateHtmlPage(res, req.url, htmlData, store);
     }
   );
 };

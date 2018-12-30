@@ -8,8 +8,8 @@ export const initialState = {
 
 const locale = handleActions(
   {
-    [switchLocale](state, payload) {
-      return payload.locale;
+    [switchLocale](state, { payload }) {
+      return payload;
     },
   },
   initialState.locale

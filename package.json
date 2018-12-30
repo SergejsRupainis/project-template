@@ -1,6 +1,6 @@
 {
   "name": "template-project",
-  "homepage": "/",
+  "homepage": "/kontakti/next/",
   "version": "0.2.0",
   "private": true,
   "dependencies": {
@@ -160,6 +160,7 @@
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "enzyme-to-json": "^3.3.5",
+    "handlebars": "^4.0.12",
     "jest-styled-components": "^6.3.1",
     "react-test-renderer": "^16.7.0"
   }

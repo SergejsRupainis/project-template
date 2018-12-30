@@ -3,8 +3,13 @@ import { Route, Switch } from 'react-router-dom';
 
 // import Home from './Home';
 import Todos from './containers/Todos/Loadable';
+import LocaleResolver from './containers/LanguageProvider/LocaleResolver';
 import logo from './logo.svg';
 import './App.css';
+
+const DefaultLocaleResolver = props => (
+  <LocaleResolver {...props} defaultPage="todos" />
+);
 
 const App = () => (
   <div className="App">
@@ -22,8 +27,10 @@ const App = () => (
         Learn React
       </a>
     </header>
+    <Route exact path="/" component={DefaultLocaleResolver} />
+    <Route path="/:locale" component={DefaultLocaleResolver} />
     <Switch>
-      <Route exact path="/" component={Todos} />
+      <Route exact path="/:locale/todos" component={Todos} />
     </Switch>
   </div>
 );
