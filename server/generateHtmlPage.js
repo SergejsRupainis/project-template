@@ -8,8 +8,10 @@ import { Frontload, frontloadServerRender } from 'react-frontload';
 import { StaticRouter } from 'react-router';
 import Helmet from 'react-helmet';
 import { ChunkExtractor } from '@loadable/server';
+import { translationMessages } from 'utils/i18n';
 
 import App from '../src/App.jsx';
+import LanguageProvider from '../src/containers/LanguageProvider';
 import { homepage } from '../package.json';
 import injectHTML from './injectHTML';
 
@@ -53,7 +55,9 @@ export default function generateHtmlPage(res, url, htmlData, store) {
           basename={homepage.slice(0, -1)}
         >
           <Frontload isServer>
-            <App />
+            <LanguageProvider messages={translationMessages}>
+              <App />
+            </LanguageProvider>
           </Frontload>
         </StaticRouter>
       </Provider>
