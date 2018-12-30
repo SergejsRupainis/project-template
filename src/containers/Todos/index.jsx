@@ -12,7 +12,7 @@ import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { frontloadConnect } from 'react-frontload';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedDate } from 'react-intl';
 
 import injectReducer from 'utils/injectReducer';
 
@@ -99,7 +99,7 @@ export class Todos extends Component {
         {todos.length > 0 && <code>{JSON.stringify(todos)}</code>}
         {lastUpdated && (
           <div>
-            Last updated at {new Date(lastUpdated).toLocaleTimeString()}.{' '}
+            Last updated at <FormattedDate value={new Date(lastUpdated)} />
           </div>
         )}
         {error && <div>{`Error message: ${error}`}</div>}
