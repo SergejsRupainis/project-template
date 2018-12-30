@@ -17,7 +17,7 @@ import { createAction } from 'redux-actions';
 
 import agent from './agent';
 import { FETCH_INVALIDATE, FETCH_REQUESTED, FETCH_RESPONSE } from './types';
-import { getTodos } from './selectors';
+import { getTodosState } from './selectors';
 
 export const fetchInvalidate = createAction(FETCH_INVALIDATE);
 export const fetchRequested = createAction(FETCH_REQUESTED);
@@ -46,7 +46,7 @@ export function fetchTodos(listId) {
 }
 
 export function shouldFetch(globalState) {
-  const state = getTodos(globalState);
+  const state = getTodosState(globalState);
   if (!state) {
     return false;
   }

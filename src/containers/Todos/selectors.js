@@ -1,22 +1,22 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
-export const getTodos = state => state.todos || initialState;
+export const getTodosState = state => state.todos || initialState;
 
 export const makeSelectItems = () =>
   createSelector(
-    getTodos,
+    getTodosState,
     todosState => todosState.items || []
   );
 
 export const makeSelectIsFetching = () =>
   createSelector(
-    getTodos,
+    getTodosState,
     todosState => todosState.isFetching
   );
 
 export const makeSelectError = () =>
   createSelector(
-    getTodos,
+    getTodosState,
     todosState => todosState.error
   );
