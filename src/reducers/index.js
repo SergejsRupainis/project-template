@@ -29,11 +29,3 @@ export default function createReducer(
 
   return combineReducers(reducers);
 }
-
-// export default function createReducer(injectedReducers = {}) {
-//   return combineReducers({
-//     router: connectRouter(history),
-//     errorMessage: errorMessageReducer,
-//     ...injectedReducers,
-//   });
-// }
