@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import { makeSelectLocale } from './selectors';
 import * as actions from './actions';
@@ -43,8 +44,11 @@ export default function withLocaleSwitch(WrappedComponent) {
       dispatch
     );
 
-  return connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(LocaleSwitch);
+  return hoistNonReactStatics(
+    connect(
+      mapStateToProps,
+      mapDispatchToProps
+    )(LocaleSwitch),
+    WrappedComponent
+  );
 }

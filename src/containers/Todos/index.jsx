@@ -12,7 +12,7 @@ import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { frontloadConnect } from 'react-frontload';
-import { FormattedMessage, FormattedDate } from 'react-intl';
+import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl';
 
 import injectReducer from 'utils/injectReducer';
 
@@ -31,6 +31,7 @@ import LocaleSelector from '../../components/LocaleSelector';
 import withLocaleSwitch from '../LocaleProvider/withLocaleSwitch';
 
 const ConnectedLocaleSelector = withLocaleSwitch(LocaleSelector);
+const SomeCheck = injectIntl(props => <div>{JSON.stringify(props)}</div>);
 const selectedListId = 1;
 
 /**
@@ -117,6 +118,7 @@ export class Todos extends Component {
         </button>
         <div>
           <ConnectedLocaleSelector />
+          <SomeCheck />
         </div>
       </div>
     );
