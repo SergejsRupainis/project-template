@@ -27,6 +27,10 @@ import {
   makeSelectError,
 } from './selectors';
 
+import LocaleSelector from '../../components/LocaleSelector';
+import withLocaleSwitch from '../LocaleProvider/withLocaleSwitch';
+
+const ConnectedLocaleSelector = withLocaleSwitch(LocaleSelector);
 const selectedListId = 1;
 
 /**
@@ -111,6 +115,9 @@ export class Todos extends Component {
         <button type="button" onClick={() => changePage()}>
           Go to about page via redux
         </button>
+        <div>
+          <ConnectedLocaleSelector />
+        </div>
       </div>
     );
   }

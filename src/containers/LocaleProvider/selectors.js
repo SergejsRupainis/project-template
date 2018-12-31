@@ -8,3 +8,9 @@ export const makeSelectLocale = () =>
     getLocaleState,
     localeState => localeState.locale
   );
+
+export const makeSelectIsChangedByAction = () =>
+  createSelector(
+    getLocaleState,
+    localeState => localeState.isChangedByAction
+  );

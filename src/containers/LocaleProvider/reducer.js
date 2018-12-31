@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
-import { switchLocale } from './actions';
+import { switchLocale, resetLocaleChange } from './actions';
 
 export const initialState = {
   locale: 'en',
+  isChangedByAction: false,
 };
 
 const locale = handleActions(
@@ -15,6 +16,19 @@ const locale = handleActions(
   initialState.locale
 );
 
+const isChangedByAction = handleActions(
+  {
+    [switchLocale]() {
+      return true;
+    },
+    [resetLocaleChange]() {
+      return false;
+    },
+  },
+  initialState.isChangedByAction
+);
+
 export default combineReducers({
   locale,
+  isChangedByAction,
 });

@@ -6,7 +6,7 @@ import { frontloadConnect } from 'react-frontload';
 
 import { SUPPORTED_LOCALES } from '../../config';
 
-import { makeSelectLocale } from './selectors';
+import { makeSelectLocale, makeSelectIsChangedByAction } from './selectors';
 import * as actions from './actions';
 
 const LocaleResolver = () => null;
@@ -20,22 +20,31 @@ LocaleResolver.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   locale: makeSelectLocale(),
+  isChangedByAction: makeSelectIsChangedByAction(),
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      switchLocale: actions.switchLocale,
+      ...actions,
     },
     dispatch
   );
 
 const frontload = async props => {
   let { locale } = props;
-  const { switchLocale, defaultPage, history } = props;
+  const {
+    switchLocale,
+    resetLocaleChange,
+    isChangedByAction,
+    defaultPage,
+    history,
+    location,
+  } = props;
   const { locale: pathLocale } = props.match.params;
 
   if (
+    !isChangedByAction &&
     pathLocale &&
     locale !== pathLocale &&
     SUPPORTED_LOCALES.has(pathLocale)
@@ -46,6 +55,12 @@ const frontload = async props => {
 
   if (!pathLocale) {
     history.replace(`/${locale}/${defaultPage}`);
+  }
+
+  if (isChangedByAction) {
+    const currentPath = location.pathname.split(`/${pathLocale}/`)[1] || '';
+    history.push(`/${locale}/${currentPath}`);
+    resetLocaleChange();
   }
 };
 
