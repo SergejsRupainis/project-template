@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { frontloadConnect } from 'react-frontload';
 import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import injectReducer from 'utils/injectReducer';
 
@@ -30,6 +29,7 @@ import {
 
 import LocaleSelector from '../../components/LocaleSelector';
 import withLocaleSwitch from '../LocaleProvider/withLocaleSwitch';
+import Link from '../../routing/Link';
 
 const ConnectedLocaleSelector = withLocaleSwitch(LocaleSelector);
 
@@ -126,7 +126,7 @@ export class Todos extends Component {
           <LocaleCheck />
         </div>
         <div>
-          <Link to="/about-us" />
+          <Link to="/about-us">About Us</Link>
         </div>
       </div>
     );
