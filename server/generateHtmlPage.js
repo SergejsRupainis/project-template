@@ -89,6 +89,7 @@ export default async function generateHtmlPage(res, url, htmlData, store) {
   } else {
     // We need to tell Helmet to compute the right meta tags, title, and such
     const helmet = Helmet.renderStatic();
+    const styledStyleTags = sheet.getStyleTags();
 
     // Pass all this nonsense into our HTML formatting function above
     const html = injectHTML(htmlData, {
@@ -96,7 +97,7 @@ export default async function generateHtmlPage(res, url, htmlData, store) {
       title: helmet.title.toString(),
       meta: helmet.meta.toString(),
       body: routeMarkup,
-      styleTags: ``,
+      styleTags: styledStyleTags,
       prefetchScriptTags: '',
       scriptTags: '',
       state: JSON.stringify(store.getState()).replace(/</g, '\\u003c'),
