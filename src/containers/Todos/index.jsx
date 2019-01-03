@@ -130,11 +130,24 @@ export class Todos extends Component {
           <Link to="/about-us">About Us</Link>
         </div>
         <div>
+          <AccessControl>Everyone can see it</AccessControl>
+        </div>
+        <div>
+          <AccessControl allowedRoles="anonymous">
+            Only not logged in users can see it
+          </AccessControl>
+        </div>
+        <div>
+          <AccessControl allowedRoles="all">
+            Only logged in users can see it
+          </AccessControl>
+        </div>
+        <div>
           <AccessControl
-            allowedRoles={['KontaktiUser']}
+            allowedRoles={['KontaktiAdmin']}
             renderNoAccess={() => <div>No access</div>}
           >
-            Secret item
+            Only admins can see it. (with role `KontaktiAdmin`)
           </AccessControl>
         </div>
       </div>

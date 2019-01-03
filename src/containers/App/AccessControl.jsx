@@ -2,7 +2,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { checkRoles } from 'utils/auth';
 
-import { makeSelectUser, makeSelectIsLoggedIn } from './selectors';
+import { makeSelectUser } from './selectors';
 
 const AccessControl = ({
   children,
@@ -17,7 +17,7 @@ const AccessControl = ({
   if (accessCheck) {
     permitted = accessCheck(user) && checkRoles(user, allowedRoles);
   } else {
-    // otherwise only check permissions
+    // otherwise only check roles
     permitted = checkRoles(user, allowedRoles);
   }
 
@@ -35,6 +35,5 @@ AccessControl.defaultProps = {
 export default connect(
   createStructuredSelector({
     user: makeSelectUser(),
-    isLoggedIn: makeSelectIsLoggedIn(),
   })
 )(AccessControl);
