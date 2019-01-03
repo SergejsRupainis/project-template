@@ -9,8 +9,11 @@ import { StaticRouter } from 'react-router';
 import Helmet from 'react-helmet';
 import { ChunkExtractor } from '@loadable/server';
 import { translationMessages } from 'utils/i18n';
+import getInjectors from 'utils/reducerInjectors';
 
-import App from '../src/App.jsx';
+import App from '../src/containers/App';
+import { fetchUserInfoIfNeeded as fetchUserInfo } from '../src/containers/App/actions';
+import reducer from '../src/containers/App/reducer';
 import LocaleProvider from '../src/containers/LocaleProvider';
 import { homepage } from '../package.json';
 import injectHTML from './injectHTML';
@@ -18,7 +21,7 @@ import injectHTML from './injectHTML';
 const statsFile = path.resolve('./build/loadable-stats.json');
 const extractor = new ChunkExtractor({ statsFile });
 
-export default function generateHtmlPage(res, url, htmlData, store) {
+export default async function generateHtmlPage(res, url, htmlData, store) {
   // If the user has a cookie (i.e. they're signed in) - set them as the current user
   // Otherwise, we want to set the current state to be logged out, just in case this isn't the default
   // if ('mywebsite' in req.cookies) {
@@ -26,6 +29,14 @@ export default function generateHtmlPage(res, url, htmlData, store) {
   // } else {
   //   store.dispatch(logoutUser());
   // }
+
+  // inject application reducer by default
+  const injectors = getInjectors(store);
+  const { injectReducer } = injectors;
+  injectReducer('app', reducer);
+
+  // set current auth state before rendering
+  await store.dispatch(fetchUserInfo());
 
   const context = {};
 
@@ -64,50 +75,51 @@ export default function generateHtmlPage(res, url, htmlData, store) {
     </StyleSheetManager>
   );
 
-  frontloadServerRender(() => renderToString(Application)).then(routeMarkup => {
-    if (context.url) {
-      // If context has a url property, then we need to handle a redirection in Redux Router
-      res.writeHead(302, {
-        Location: context.url,
-      });
+  const routeMarkup = await frontloadServerRender(() =>
+    renderToString(Application)
+  );
+  if (context.url) {
+    // If context has a url property, then we need to handle a redirection in Redux Router
+    res.writeHead(302, {
+      Location: context.url,
+    });
 
-      res.end();
-      return;
-    } else {
-      // We need to tell Helmet to compute the right meta tags, title, and such
-      const helmet = Helmet.renderStatic();
+    res.end();
+    return;
+  } else {
+    // We need to tell Helmet to compute the right meta tags, title, and such
+    const helmet = Helmet.renderStatic();
 
-      // Pass all this nonsense into our HTML formatting function above
-      const html = injectHTML(htmlData, {
-        html: helmet.htmlAttributes.toString(),
-        title: helmet.title.toString(),
-        meta: helmet.meta.toString(),
-        body: routeMarkup,
-        styleTags: ``,
-        prefetchScriptTags: '',
-        scriptTags: '',
-        state: JSON.stringify(store.getState()).replace(/</g, '\\u003c'),
-      });
+    // Pass all this nonsense into our HTML formatting function above
+    const html = injectHTML(htmlData, {
+      html: helmet.htmlAttributes.toString(),
+      title: helmet.title.toString(),
+      meta: helmet.meta.toString(),
+      body: routeMarkup,
+      styleTags: ``,
+      prefetchScriptTags: '',
+      scriptTags: '',
+      state: JSON.stringify(store.getState()).replace(/</g, '\\u003c'),
+    });
 
-      /* old version - not sure, need to try preloading and check how it would work */
-      // const scriptTags = extractor.getScriptTags();
-      // const prefetchScriptTags = extractor.getLinkTags();
-      // const styleTags = extractor.getStyleTags();
-      // const styledStyleTags = sheet.getStyleTags();
+    /* old version - not sure, need to try preloading and check how it would work */
+    // const scriptTags = extractor.getScriptTags();
+    // const prefetchScriptTags = extractor.getLinkTags();
+    // const styleTags = extractor.getStyleTags();
+    // const styledStyleTags = sheet.getStyleTags();
 
-      // const html = injectHTML(htmlData, {
-      //   html: helmet.htmlAttributes.toString(),
-      //   title: helmet.title.toString(),
-      //   meta: helmet.meta.toString(),
-      //   body: routeMarkup,
-      //   styleTags: `${styleTags}${styledStyleTags}`,
-      //   prefetchScriptTags,
-      //   scriptTags,
-      //   state: JSON.stringify(store.getState()).replace(/</g, '\\u003c'),
-      // });
+    // const html = injectHTML(htmlData, {
+    //   html: helmet.htmlAttributes.toString(),
+    //   title: helmet.title.toString(),
+    //   meta: helmet.meta.toString(),
+    //   body: routeMarkup,
+    //   styleTags: `${styleTags}${styledStyleTags}`,
+    //   prefetchScriptTags,
+    //   scriptTags,
+    //   state: JSON.stringify(store.getState()).replace(/</g, '\\u003c'),
+    // });
 
-      // We have all the final HTML, let's send it to the user already!
-      res.send(html);
-    }
-  });
+    // We have all the final HTML, let's send it to the user already!
+    res.send(html);
+  }
 }

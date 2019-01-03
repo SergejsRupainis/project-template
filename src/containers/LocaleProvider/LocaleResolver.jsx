@@ -58,8 +58,10 @@ const frontload = async props => {
   }
 
   if (isChangedByAction) {
-    const currentPath = location.pathname.split(`/${pathLocale}/`)[1] || '';
-    history.push(`/${locale}/${currentPath}`);
+    if (locale !== pathLocale) {
+      const currentPath = location.pathname.split(`/${pathLocale}/`)[1] || '';
+      history.push(`/${locale}/${currentPath}`);
+    }
     resetLocaleChange();
   }
 };

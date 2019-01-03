@@ -8,7 +8,7 @@ import { setupLocalization, translationMessages } from 'utils/i18n';
 import history from 'utils/history';
 
 import './index.css';
-import App from './App';
+import App from './containers/App';
 import configureStore from './store/configureStore';
 import LocaleProvider from './containers/LocaleProvider';
 
@@ -53,7 +53,7 @@ if (module.hot) {
   // Hot reloadable React components and translation json files
   // modules.hot.accept does not accept dynamic dependencies,
   // have to be constants at compile-time
-  module.hot.accept(['utils/i18n', './App'], () => {
+  module.hot.accept(['utils/i18n', './containers/App'], () => {
     const root = document.getElementById('root');
     unmountComponentAtNode(root);
     renderApplication(translationMessages);

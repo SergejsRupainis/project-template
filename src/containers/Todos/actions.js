@@ -50,11 +50,11 @@ export function shouldFetch(globalState) {
   if (!state) {
     return false;
   }
-  if (!state.items) {
-    return true;
-  }
   if (state.isFetching) {
     return false;
+  }
+  if (!state.items) {
+    return true;
   }
   return state.didInvalidate;
 }
