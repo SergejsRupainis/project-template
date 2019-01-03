@@ -9,7 +9,11 @@ import injectReducer from 'utils/injectReducer';
 
 import reducer from './reducer';
 import * as actions from './actions';
-import { makeSelectUser, makeSelectSessionRequiresChecking } from './selectors';
+import {
+  makeSelectUser,
+  makeSelectSessionRequiresChecking,
+  makeSelectIsLoggedIn,
+} from './selectors';
 
 import Todos from '../Todos/Loadable';
 import LocaleResolver from '../LocaleProvider/LocaleResolver';
@@ -18,9 +22,10 @@ const DefaultLocaleResolver = props => (
   <LocaleResolver {...props} defaultPage="todos" />
 );
 
-const App = ({ sessionRequiresChecking }) => (
+const App = ({ sessionRequiresChecking, isLoggedIn }) => (
   <div role="main">
     {sessionRequiresChecking && <div>Loading user info ...</div>}
+    <div>Is logged in: {JSON.stringify(isLoggedIn)}</div>
     <React.Fragment>
       <Route exact path="/" component={DefaultLocaleResolver} />
       <Route path="/:locale" component={DefaultLocaleResolver} />
@@ -35,6 +40,7 @@ const App = ({ sessionRequiresChecking }) => (
 
 App.propTypes = {
   sessionRequiresChecking: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
   // user: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
@@ -45,6 +51,7 @@ App.defaultProps = {
 const mapStateToProps = createStructuredSelector({
   user: makeSelectUser(),
   sessionRequiresChecking: makeSelectSessionRequiresChecking(),
+  isLoggedIn: makeSelectIsLoggedIn(),
 });
 
 const mapDispatchToProps = dispatch =>
@@ -56,7 +63,6 @@ const mapDispatchToProps = dispatch =>
   );
 
 const frontload = async props => props.fetchUserInfo();
-// const frontload = async () => Promise.resolve();
 
 const FrontloadApp = frontloadConnect(frontload, {
   onMount: true,

@@ -30,6 +30,7 @@ import {
 import LocaleSelector from '../../components/LocaleSelector';
 import withLocaleSwitch from '../LocaleProvider/withLocaleSwitch';
 import Link from '../../routing/Link';
+import AccessControl from '../App/AccessControl';
 
 const ConnectedLocaleSelector = withLocaleSwitch(LocaleSelector);
 
@@ -127,6 +128,14 @@ export class Todos extends Component {
         </div>
         <div>
           <Link to="/about-us">About Us</Link>
+        </div>
+        <div>
+          <AccessControl
+            allowedRoles={['KontaktiUser']}
+            renderNoAccess={() => <div>No access</div>}
+          >
+            Secret item
+          </AccessControl>
         </div>
       </div>
     );
