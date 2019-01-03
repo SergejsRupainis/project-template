@@ -1,9 +1,11 @@
+export const ROLES_PROPERTY_NAME = 'auth_user:roles';
+
 export function isLoggedIn(user) {
   return !!user;
 }
 
 export function getUserRoles(user) {
-  const userRoles = (user || {})['auth_user:roles'] || [];
+  const userRoles = (user || {})[ROLES_PROPERTY_NAME] || [];
 
   return typeof userRoles === 'string' ? [userRoles] : userRoles;
 }
@@ -23,5 +25,3 @@ export function checkRoles(user, allowedRoles) {
 
   return getUserRoles(user).some(role => allowedRoles.includes(role));
 }
-
-export const ROLES_PROPERTY_NAME = 'auth_user:roles';

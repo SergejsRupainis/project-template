@@ -17,6 +17,7 @@ import {
 
 import Todos from '../Todos/Loadable';
 import LocaleResolver from '../LocaleProvider/LocaleResolver';
+import ErrorPage from '../../components/error/ErrorPage';
 
 const DefaultLocaleResolver = props => (
   <LocaleResolver {...props} defaultPage="todos" />
@@ -32,6 +33,7 @@ const App = ({ sessionRequiresChecking, isLoggedIn }) => (
       {!sessionRequiresChecking && (
         <Switch>
           <Route exact path="/:locale/todos" component={Todos} />
+          <Route path="" component={() => <ErrorPage errorCode={404} />} />
         </Switch>
       )}
     </React.Fragment>
@@ -41,12 +43,9 @@ const App = ({ sessionRequiresChecking, isLoggedIn }) => (
 App.propTypes = {
   sessionRequiresChecking: PropTypes.bool.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
-  // user: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
-App.defaultProps = {
-  // user: null,
-};
+App.defaultProps = {};
 
 const mapStateToProps = createStructuredSelector({
   user: makeSelectUser(),
