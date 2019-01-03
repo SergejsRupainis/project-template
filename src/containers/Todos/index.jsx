@@ -149,11 +149,7 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-const frontload = async props => {
-  const dispatch = await props.fetchTodos(selectedListId);
-  console.log('todos loaded: ', dispatch);
-  return dispatch;
-};
+const frontload = async props => props.fetchTodos(selectedListId);
 
 const FrontloadTodos = frontloadConnect(frontload, {
   onMount: true,
