@@ -127,7 +127,7 @@ export class Todos extends Component {
           <LocaleCheck />
         </div>
         <div>
-          <Link to="/about-us">About Us</Link>
+          <Link to="about-us">About Us</Link>
         </div>
         <div>
           <AccessControl>Everyone can see it</AccessControl>
@@ -164,7 +164,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      changePage: () => push('/about-us'),
+      changePage: () => push('/en/about-us'),
       fetchTodos: fetchTodosIfNeeded,
       fetchInvalidate: fetchInvalidateAction,
     },

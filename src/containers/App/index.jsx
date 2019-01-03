@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -79,6 +79,7 @@ const appReducer = injectReducer({
 });
 
 export default compose(
+  withRouter,
   appReducer,
   withConnect
 )(FrontloadApp);
